@@ -3,32 +3,34 @@ import { Button } from '@mui/material';
 import * as Yup from 'yup';
 import { nanoid } from 'nanoid';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
-import { addContact } from '../../redux/contactsSlice';
+import { addContact } from '../../redux/contactsOps';
 import style from './ContactForm.module.css';
 
 const ContactForm = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    const userName = values.name.trim();
-    const userNumber = values.number.trim();
+    const newContact = {
+      name: values.name.trim(),
+      number: values.number.trim(),
+    };
 
-    dispatch(addContact({ name: userName, number: userNumber }));
+    dispatch(addContact(newContact));
 
     actions.resetForm();
   };
 
-  const id = nanoid();
   const FeedbackSchema = Yup.object().shape({
     name: Yup.string()
-      .min(2, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+    .min(2, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
     number: Yup.string()
-      .min(3, 'Too Short!')
-      .max(50, 'Too Long!')
-      .required('Required'),
+    .min(3, 'Too Short!')
+    .max(50, 'Too Long!')
+    .required('Required'),
   });
+  const id = nanoid();
 
   return (
     <Formik

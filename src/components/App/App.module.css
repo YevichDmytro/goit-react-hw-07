@@ -2,3 +2,7 @@
   padding: 20px 16px;
   text-align: center;
 }
+
+.requestText {
+  display: block;
+}

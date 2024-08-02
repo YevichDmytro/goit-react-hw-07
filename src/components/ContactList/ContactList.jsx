@@ -1,27 +1,21 @@
 import { useSelector } from 'react-redux';
+import {
+  selectError,
+  selectFilteredContacts,
+  selectLoading,
+} from '../../redux/selectors';
 import Contact from '../Contact/Contact';
-import { selectContacts, selectNameFilter } from '../../redux/selectors';
 import style from './ContactList.module.css';
 
-const getVisibleContacts = (contactsList, filter) => {
-  switch (filter) {
-    case filter:
-      return contactsList.filter(contact =>
-        contact.name.toLowerCase().includes(filter.toLowerCase())
-      );
-    default:
-      return contactsList;
-  }
-};
-
 const ContactList = () => {
-  const contactsList = useSelector(selectContacts);
-  const filter = useSelector(selectNameFilter);
-  const visibleContacts = getVisibleContacts(contactsList, filter);
+  const visibleContacts = useSelector(selectFilteredContacts);
+
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
 
   return (
     <>
-      {visibleContacts.length > 0 ? (
+      {visibleContacts.length > 0 && (
         <ul className={style.list}>
           {visibleContacts.map(contact => {
             return (
@@ -35,7 +29,8 @@ const ContactList = () => {
             );
           })}
         </ul>
-      ) : (
+      )}
+      {!loading && !error && visibleContacts.length === 0 && (
         <span className={style.emptyList}>No one contact yet</span>
       )}
     </>
